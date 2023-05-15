@@ -12,29 +12,14 @@
 // limitations under the License.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
 use crate::cpabe::CpAbeExtensionScheme;
+use crate::utils::CpAbeKeyWrapper;
 use ink::prelude::vec::Vec;
 use rabe::schemes::bsw::{setup, CpAbeMasterKey, CpAbePublicKey};
-use serde::{Deserialize, Serialize};
-use serde_json;
 
-trait KeyConverter: Sized {
-    fn from_bytes(bytes: &[u8]) -> Option<Self> {
-        serde_json::from_slice(bytes).ok()
-    }
+pub struct NotInitialized;
 
-    fn to_bytes(&self) -> Option<Vec<u8>> {
-        serde_json::to_vec(self).ok()
-    }
-}
-
-impl KeyConverter for CpAbePublicKey {}
-impl KeyConverter for CpAbeMasterKey {}
-
-struct NotInitialized;
-
-struct Initialized {
+pub struct Initialized {
     public_key: CpAbePublicKey,
     master_key: CpAbeMasterKey,
 }
@@ -54,15 +39,15 @@ impl Default for CpAbeBuilder<NotInitialized> {
 impl CpAbeBuilder<NotInitialized> {
     pub fn cpabe_setup() -> (Vec<u8>, Vec<u8>) {
         let (public_key, master_key) = setup();
-        (
-            public_key.to_bytes().unwrap(),
-            master_key.to_bytes().unwrap(),
-        )
+        let public_key = CpAbeKeyWrapper(public_key);
+        let master_key = CpAbeKeyWrapper(master_key);
+
+        (public_key.to_bytes(), master_key.to_bytes())
     }
 
     pub fn keys(public_key: &[u8], master_key: &[u8]) -> CpAbeBuilder<Initialized> {
-        let public_key = CpAbePublicKey::from_bytes(public_key).unwrap();
-        let master_key = CpAbeMasterKey::from_bytes(master_key).unwrap();
+        let public_key = CpAbeKeyWrapper::<CpAbePublicKey>::from_bytes(public_key).get_key();
+        let master_key = CpAbeKeyWrapper::<CpAbeMasterKey>::from_bytes(master_key).get_key();
 
         CpAbeBuilder {
             state: Initialized {

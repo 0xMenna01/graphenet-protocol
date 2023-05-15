@@ -12,13 +12,12 @@
 // limitations under the License.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
 use rabe::schemes::bsw::{CpAbeMasterKey, CpAbePublicKey};
 
 mod attributes;
 pub mod builder;
 
-struct CpAbeExtensionScheme {
+pub struct CpAbeExtensionScheme {
     public_key: CpAbePublicKey,
     master_key: CpAbeMasterKey,
 }

@@ -20,12 +20,12 @@ pub mod cpabe_contract {
     use ink::prelude::vec::Vec;
 
     #[ink(storage)]
-    pub struct CpAbeExt {
+    pub struct CpAbeExtension {
         public_key: Vec<u8>,
         master_key: Vec<u8>,
     }
 
-    impl CpAbeExt {
+    impl CpAbeExtension {
         #[ink(constructor)]
         pub fn default() -> Self {
             let (public_key, master_key) = CpAbeBuilder::cpabe_setup();
