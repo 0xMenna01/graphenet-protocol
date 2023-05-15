@@ -20,6 +20,13 @@ ink = { version = "4.1.0", default-features = false}
 scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive"] }
 scale-info = { version = "2.6", default-features = false, features = ["derive"], optional = true }
 
+rabe = "0.3.1"
+
+# Brush dependency
+openbrush = { git = "https://github.com/Brushfam/openbrush-contracts.git", version = "~3.1.1", default-features = false }
+
+encryption = { version = "0.1.0", path = "../encryption"}
+
 [lib]
 name = "graphenet_contracts"
 path = "src/lib.rs"
@@ -33,4 +40,6 @@ std = [
     "ink/std",
     "scale/std",
     "scale-info/std",
+    # Brush dependency
+    "openbrush/std",
 ]

@@ -16,4 +16,4 @@
 // remember to remove this
 #![allow(dead_code)]
 
-mod cpabe;
+pub mod cpabe;

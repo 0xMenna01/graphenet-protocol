@@ -13,8 +13,11 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use ink::prelude::{string::String, vec::Vec};
+
 type Attribute = String;
 
+#[ink::storage_item]
 pub struct AttributeSet {
     attributes: Vec<Attribute>,
 }

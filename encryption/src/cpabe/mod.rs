@@ -13,19 +13,12 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use rabe::schemes::bsw::{CpAbeMasterKey, CpAbePublicKey};
+
 mod attributes;
+pub mod builder;
 
-use attributes::AttributeSet;
-use ink::primitives::AccountId;
-use rabe::schemes::bsw::{CpAbeMasterKey, CpAbePublicKey, CpAbeSecretKey};
-
-pub enum Error {
-    AttributeCreationFailed,
-    NotAllowed,
-}
-
-pub trait CpAbeScheme {
-    fn setup() -> (CpAbePublicKey, CpAbeMasterKey);
-    fn create_id_for_attributes(account: AccountId, attributes: AttributeSet) -> Result<(), Error>;
-    fn get_key() -> Result<CpAbeSecretKey, Error>;
+struct CpAbeExtensionScheme {
+    public_key: CpAbePublicKey,
+    master_key: CpAbeMasterKey,
 }

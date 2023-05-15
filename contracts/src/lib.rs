@@ -13,3 +13,30 @@
 // limitations under the License.
 
 #![cfg_attr(not(feature = "std"), no_std)]
+
+#[openbrush::contract]
+pub mod cpabe_contract {
+    use encryption::cpabe::builder::CpAbeBuilder;
+    use ink::prelude::vec::Vec;
+
+    #[ink(storage)]
+    pub struct CpAbeExt {
+        public_key: Vec<u8>,
+        master_key: Vec<u8>,
+    }
+
+    impl CpAbeExt {
+        #[ink(constructor)]
+        pub fn default() -> Self {
+            let (public_key, master_key) = CpAbeBuilder::cpabe_setup();
+
+            Self {
+                public_key,
+                master_key,
+            }
+        }
+
+        #[ink(message)]
+        pub fn todo(&self) {}
+    }
+}
