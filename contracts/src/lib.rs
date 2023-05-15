@@ -18,22 +18,25 @@
 pub mod cpabe_contract {
     use encryption::cpabe::builder::CpAbeBuilder;
     use ink::prelude::vec::Vec;
+    use ink::storage::Lazy;
 
     #[ink(storage)]
     pub struct CpAbeExtension {
         public_key: Vec<u8>,
-        master_key: Vec<u8>,
+        // Lazy loading for security issues
+        master_key: Lazy<Vec<u8>>,
     }
 
     impl CpAbeExtension {
         #[ink(constructor)]
         pub fn default() -> Self {
+            let mut instance = Self::default();
             let (public_key, master_key) = CpAbeBuilder::cpabe_setup();
 
-            Self {
-                public_key,
-                master_key,
-            }
+            instance.public_key = public_key;
+            instance.master_key.set(&master_key);
+
+            instance
         }
 
         #[ink(message)]
